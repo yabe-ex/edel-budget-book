@@ -104,7 +104,7 @@ class EdelBudgetBookControl {
 
         $user = wp_get_current_user();
         $member_id = $user->ID;
-        $gen   = esc_html($_POST['gen']);
+        $gen   = $this->sanitize_my_text($_POST['gen']);
         $inv   = intval($_POST['inv']);
         $ret   = intval($_POST['ret']);
         $text  = sanitize_textarea_field($_POST['text']);
@@ -172,7 +172,7 @@ class EdelBudgetBookControl {
 
         $select_month = sanitize_option('date_format', $_POST['date']);
         $search_type  = intval($_POST['type']);
-        $search_ret   = esc_html($_POST['ret']);
+        $search_ret   = $this->sanitize_my_text($_POST['ret']);
         $member_id    = intval($_POST['member_id']);
 
         if( ! $member_id ) {
@@ -207,8 +207,8 @@ class EdelBudgetBookControl {
         global $wpdb;
         $table = $wpdb->prefix . "ebb_main";
 
-        $search_span = esc_html($_POST['span']);
-        $search_ret  = esc_html($_POST['ret']);
+        $search_span = $this->sanitize_my_text($_POST['span']);
+        $search_ret  = $this->sanitize_my_text($_POST['ret']);
         $member_id   = intval($_POST['member_id']);
 
         if( ! $member_id ) {
@@ -306,4 +306,7 @@ class EdelBudgetBookControl {
         return $beginning_week_date;
     }
 
+    function sanitize_my_text($str) {
+        return preg_match("/^[a-z]+$/", $str) ? $str : '';
+    }
 }
